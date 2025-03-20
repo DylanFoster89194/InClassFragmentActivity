@@ -18,6 +18,8 @@ class ImageDisplayFragment : Fragment() {
 
     private lateinit var images: IntArray
 
+    lateinit var imageViewModel: ImageViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // If we have arguments
@@ -27,6 +29,7 @@ class ImageDisplayFragment : Fragment() {
                 images = it
             }
         }
+        imageViewModel = ViewModelProvider(requireActivity())[ImageViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,17 +43,14 @@ class ImageDisplayFragment : Fragment() {
         // The recycler view is the root element of the Fragment's layout
         // as such the view argument passed to onViewCreated() is the RecyclerView
         with (view as RecyclerView) {
-            adapter = CustomRecyclerAdapter(images)
-            layoutManager = GridLayoutManager(requireContext(), 2)
+    imageViewModel.getImages().observe(requireActivity()) {
+
+        adapter = CustomRecyclerAdapter(images)
+        layoutManager = GridLayoutManager(requireContext(), 2)
+        imageViewModel.setSelectedImage(it)
+    }
+    }
         }
     }
 
-    companion object {
-        fun newInstance(images: IntArray) =
-            ImageDisplayFragment().apply {
-                arguments = Bundle().apply {
-                    putIntArray(IMAGES_KEY, images)
-                }
-            }
-    }
-}
+

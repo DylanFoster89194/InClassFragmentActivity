@@ -19,5 +19,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment) // Ensure fragment_container exists in activity_main.xml
             .commit()
+
+
     }
 }
